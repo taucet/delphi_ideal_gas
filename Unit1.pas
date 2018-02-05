@@ -46,14 +46,13 @@ implementation
 
 type TMolecula=record x,y,vx,vy,v,a:real end;
 
-const r=5; //радиус молекулы
-var BMP:TBitMap;//BitMap для рисования
-    M:array[1..1000] of TMolecula;//массив молекул
-    V:real;//скорость
-    x1,x2,y1,y2:integer;//ограничители координат молекул
-    Count:integer=50;//количество молекул
+const r=5; //СЂР°РґРёСѓСЃ РјРѕР»РµРєСѓР»С‹
+var BMP:TBitMap;//BitMap РґР»СЏ СЂРёСЃРѕРІР°РЅРёСЏ
+    M:array[1..1000] of TMolecula;//РјР°СЃСЃРёРІ РјРѕР»РµРєСѓР»
+    V:real;//СЃРєРѕСЂРѕСЃС‚СЊ
+    x1,x2,y1,y2:integer;//РѕРіСЂР°РЅРёС‡РёС‚РµР»Рё РєРѕРѕСЂРґРёРЅР°С‚ РјРѕР»РµРєСѓР»
+    Count:integer=50;//РєРѕР»РёС‡РµСЃС‚РІРѕ РјРѕР»РµРєСѓР»
     x0,y0:integer;
-
 
 procedure TForm1.FormCreate(Sender: TObject);
   var i:integer;
@@ -63,16 +62,16 @@ begin
   BMP:=TBitMap.Create;
   BMP.Width:=PaintBox1.Width;
   BMP.Height:=PaintBox1.Height;
-  v:=3;//скорость
-  x1:=r;//минимальная координата x
-  x2:=PaintBox1.Width-r;//максимальная координата x
-  y1:=Pnl1.Height+r;//минимальная координата y}
-  y2:=PaintBox1.Height-r;//максимальная координата y
+  v:=3;//СЃРєРѕСЂРѕСЃС‚СЊ
+  x1:=r;//РјРёРЅРёРјР°Р»СЊРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° x
+  x2:=PaintBox1.Width-r;//РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° x
+  y1:=Pnl1.Height+r;//РјРёРЅРёРјР°Р»СЊРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° y
+  y2:=PaintBox1.Height-r;//РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° y
   for i:=1 to Count do
-  begin  //расчет положения молекул
+  begin  //СЂР°СЃС‡РµС‚ РїРѕР»РѕР¶РµРЅРёСЏ РјРѕР»РµРєСѓР»
     M[i].x:=x1+(x2-x1)*0.5;
     M[i].y:=y2;
-    a:=random; //расчет направления движения молекул
+    a:=random; //СЂР°СЃС‡РµС‚ РЅР°РїСЂР°РІР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ РјРѕР»РµРєСѓР»
     M[i].vx:=cos(a)*v;
     M[i].vy:=sin(a)*v;
   end;
@@ -90,9 +89,9 @@ end;
    procedure TForm1.Draw;
   var i,x,y:integer;
 begin
-  BMP.Canvas.Brush.Color:=clSkyBlue; // цвет PaintBox
+  BMP.Canvas.Brush.Color:=clSkyBlue; // С†РІРµС‚ PaintBox
   BMP.Canvas.Rectangle(0,0,BMP.Width,BMP.Height);
-  BMP.Canvas.Brush.Color:=clMaroon; // цвет молекулы
+  BMP.Canvas.Brush.Color:=clMaroon; // С†РІРµС‚ РјРѕР»РµРєСѓР»С‹
   for i:=1 to Count do
   begin
     x:=round(M[i].x);
@@ -103,20 +102,20 @@ begin
 end;
   
 
-var t:Boolean;  // установка позиций кнопки Пуск\Стоп
+var t:Boolean;  // СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР·РёС†РёР№ РєРЅРѕРїРєРё РџСѓСЃРє\РЎС‚РѕРї
 procedure TForm1.Button1Click(Sender: TObject);
 
 begin
 if t then
   begin
      Timer1.Enabled:=True;
-     Button1.Caption:='Стоп';
+     Button1.Caption:='Г‘ГІГ®ГЇ';
      t:= not t;
   end
 else
   begin
      Timer1.Enabled:=false;
-     Button1.Caption:='Пуск';
+     Button1.Caption:='ГЏГіГ±ГЄ';
      t:= not t;
   end;
 end;
@@ -131,23 +130,23 @@ begin
    begin
    M[i].x:=M[i].x+v*M[i].vx;
    M[i].y:=M[i].y+v*M[i].vy;
-   //отражение от стенок сосуда
-    //левой
+  //РѕС‚СЂР°Р¶РµРЅРёРµ РѕС‚ СЃС‚РµРЅРѕРє СЃРѕСЃСѓРґР°
+    //Р»РµРІРѕР№
     if M[i].x<x1 then
     begin
       M[i].x:=2*x1 - M[i].x;  M[i].vx:=-M[i].vx;
     end;
-    //правой
+    //РїСЂР°РІРѕР№
     if M[i].x>x2 then
     begin
       M[i].x:=2*x2 - M[i].x;  M[i].vx:=-M[i].vx;
     end;
-    //верхней
+    //РІРµСЂС…РЅРµР№
     if M[i].y<y1 then
     begin
       M[i].y:=2*y1 - M[i].y;  M[i].vy:=-M[i].vy;
     end;
-    //нижней
+    //РЅРёР¶РЅРµР№
     if M[i].y>=y2 then
     begin
       M[i].y:=2*y2 - M[i].y;  M[i].vy:=-M[i].vy;
@@ -157,7 +156,7 @@ begin
   Draw;
 end;
        procedure TForm1.TrackBar1Change(Sender: TObject);
-var i:integer;   // движок температуры
+var i:integer;   //РґРІРёР¶РѕРє С‚РµРјРїРµСЂР°С‚СѓСЂС‹
 a:real;
 begin
 for i:=1 to Count do
@@ -172,7 +171,7 @@ for i:=1 to Count do
  end;
 
 procedure TForm1.TrackBar2Change(Sender: TObject);
-var i:integer;   // движок давления
+var i:integer;   //РґРІРёР¶РѕРє РґР°РІР»РµРЅРёСЏ
     a:real;
 begin
 Count:=count+1;
